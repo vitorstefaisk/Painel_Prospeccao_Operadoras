@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospecção de Operadoras Parceiras — Compartilhamento de Rede | Ipasgo Saúde</title>
+<style>
+/* =====================================================================
+   PALETA — Guia da Marca Ipasgo Saúde, Códigos Cromáticos (p. 26)
+   Cores principais:  Verde Cerrado #007940 · Lima Goiá #C5E838 · Areia Caldas #F3EEE4
+   Cores secundárias: Verde Araguaia #6EB02E · Amarelo Ipê #E7C221 ·
+                      Luz do Planalto #EFE98C · Chumbo Serra Dourada #2F302A
+   Combinações conforme p. 27 (evitadas combinações de baixo contraste).
+   ===================================================================== */
+:root{
+  --cerrado:#007940; --lima:#C5E838; --areia:#F3EEE4;
+  --araguaia:#6EB02E; --ipe:#E7C221; --planalto:#EFE98C; --chumbo:#2F302A;
+  /* tons derivados do Chumbo e da Areia, para texto secundário, linhas e trilhos */
+  --txt:#2F302A; --txt2:#61625B; --txt3:#8A8B84;
+  --linha:#E3DDD0; --trilho:#F3EEE4; --neutro:#D9D8D3;
+  --card:#FFFFFF;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --raio:16px; --sombra:0 1px 2px rgba(47,48,42,.06),0 8px 22px rgba(47,48,42,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--areia);font-family:var(--sans);color:var(--txt);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1300px;margin:0 auto;padding:0 0 48px}
+
+/* ---------- Cabeçalho (Verde Cerrado → Verde Araguaia) ---------- */
+.hero{background:linear-gradient(108deg,var(--cerrado) 0%,var(--cerrado) 58%,var(--araguaia) 100%);color:#fff;padding:34px 32px 78px;position:relative}
+.hero h1{margin:0;font-size:31px;font-weight:800;letter-spacing:-.6px}
+.hero p.sub{margin:9px 0 0;max-width:660px;font-size:14.5px;line-height:1.55;color:var(--areia)}
+.badges{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.badge{background:rgba(243,238,228,.12);border:1px solid rgba(243,238,228,.22);border-radius:999px;padding:6px 14px;font-size:11.5px;font-family:var(--mono);letter-spacing:.2px;color:var(--areia)}
+.badge b{color:var(--lima);font-weight:600}
+.posicao{position:absolute;right:32px;top:38px;text-align:right;font-size:12px;color:var(--planalto);line-height:1.5}
+.posicao strong{display:block;color:#fff;font-size:17px;font-weight:700;font-family:var(--mono)}
+
+/* ---------- KPIs ---------- */
+.kpis{position:relative;z-index:2;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:-52px 32px 0}
+.kpi{background:var(--card);border-radius:var(--raio);padding:18px 18px;box-shadow:var(--sombra)}
+.kpi .rot{font-family:var(--mono);font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--txt3);font-weight:600}
+.kpi .val{font-size:25px;font-weight:800;margin-top:9px;letter-spacing:-.7px;line-height:1.15;color:var(--cerrado)}
+.kpi .val small{font-size:14px;font-weight:600;color:var(--txt2);letter-spacing:0}
+.kpi .nota{margin-top:7px;font-size:12.5px;color:var(--txt2);line-height:1.45}
+.kpi.donut{display:flex;align-items:center;gap:13px}
+.donut-svg{flex:0 0 56px}
+.donut-svg text{font-family:var(--mono);font-size:11px;font-weight:700;fill:var(--cerrado)}
+
+/* ---------- Blocos ---------- */
+.bloco{background:var(--card);border-radius:var(--raio);box-shadow:var(--sombra);margin:22px 32px 0;padding:26px 28px}
+.bloco h2{margin:0;font-size:17px;font-weight:750;letter-spacing:-.3px;color:var(--cerrado)}
+.bloco p.leg{margin:5px 0 0;font-size:13px;color:var(--txt2)}
+.head-flex{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+
+/* ---------- Stepper ---------- */
+.stepper{display:flex;margin-top:30px;position:relative}
+.step{flex:1;text-align:center;position:relative;min-width:0}
+.step .conn{position:absolute;top:21px;height:3px;background:var(--linha);left:50%;width:100%;z-index:0}
+.step:last-child .conn{display:none}
+.step .conn.ok{background:var(--araguaia)}
+.step .conn.mid{background:linear-gradient(90deg,var(--araguaia),var(--ipe))}
+.step .conn.now{background:linear-gradient(90deg,var(--ipe),var(--linha))}
+.bola{width:44px;height:44px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:15px;position:relative;z-index:1;border:4px solid var(--card)}
+.bola.ok{background:var(--araguaia);color:var(--areia)}
+.bola.now{background:var(--ipe);color:var(--chumbo)}
+.bola.off{background:var(--neutro);color:var(--txt2)}
+.step .nome{margin-top:12px;font-size:11.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;line-height:1.35;padding:0 6px;color:var(--txt)}
+.step .pct{margin-top:4px;font-family:var(--mono);font-size:12px;color:var(--txt2)}
+.aqui{position:absolute;top:-26px;left:50%;transform:translateX(-50%);background:var(--cerrado);color:var(--lima);font-family:var(--mono);font-size:9.5px;letter-spacing:.9px;padding:4px 10px;border-radius:999px;white-space:nowrap}
+
+/* ---------- Gantt ---------- */
+.legenda{display:flex;gap:16px;font-size:11.5px;color:var(--txt2);align-items:center;flex-wrap:wrap}
+.legenda i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:5px}
+.legenda i.lg-marco{transform:rotate(45deg);border-radius:1px;width:8px;height:8px}
+.gantt{margin-top:22px}
+.eixo{display:flex;padding-left:250px;border-bottom:1px solid var(--linha);padding-bottom:6px;position:relative}
+.eixo span{flex:1;font-family:var(--mono);font-size:10.5px;color:var(--txt3);text-align:left}
+.fase{border-bottom:1px solid var(--trilho)}
+.fase-lin{display:flex;align-items:center;padding:11px 0;cursor:pointer;transition:background .12s}
+.fase-lin:hover{background:#FBF9F5}
+.rotulo{width:250px;flex:0 0 250px;padding-right:16px;display:flex;gap:8px;align-items:flex-start}
+.seta{color:var(--txt3);font-size:11px;margin-top:2px;transition:transform .18s;flex:0 0 10px}
+.fase.aberta .seta{transform:rotate(90deg)}
+.rotulo .tit{font-size:12.5px;font-weight:700;line-height:1.3}
+.rotulo .meta{font-family:var(--mono);font-size:10.5px;color:var(--txt3);margin-top:3px}
+.trilha{flex:1;position:relative;height:22px}
+.trilho-bg{position:absolute;inset:0;background:var(--trilho);border-radius:5px}
+.barra{position:absolute;top:0;height:22px;border-radius:5px;display:flex;align-items:center;padding:0 8px;font-family:var(--mono);font-size:10px;font-weight:700;overflow:hidden}
+.b-ok{background:var(--araguaia);color:var(--areia)}
+.b-now{background:var(--ipe);color:var(--chumbo)}
+.b-off{background:var(--neutro);color:var(--txt2)}
+.b-sem{background:var(--chumbo);color:var(--areia)}
+.b-plan{background:var(--planalto);border:1px dashed #D9C85A;box-sizing:border-box;opacity:.85}
+.barra-rot{position:absolute;top:0;height:22px;display:flex;align-items:center;font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--txt2);white-space:nowrap}
+.item .barra-rot{height:9px;top:6px;font-size:9.5px;font-weight:600}
+.itens{display:none;padding:2px 0 12px}
+.fase.aberta .itens{display:block}
+.item{display:flex;align-items:center;padding:5px 0}
+.item .rotulo{padding-left:22px;font-size:12px;color:var(--txt2);display:block}
+.item .rotulo .op{line-height:1.35;font-size:11.8px;color:var(--txt)}
+.item .rotulo .sub{font-family:var(--mono);font-size:10px;color:var(--txt3);margin-top:2px}
+.item .barra{height:9px;border-radius:3px;top:6px;min-width:5px}
+.marco{position:absolute;top:4px;width:13px;height:13px;transform:translateX(-50%) rotate(45deg);border-radius:2px;border:2px solid var(--card);cursor:pointer}
+.marco.m-ok{background:var(--araguaia)}
+.marco.m-now{background:var(--ipe)}
+.marco.m-sem{background:var(--chumbo)}
+.hoje{position:absolute;top:0;bottom:0;border-left:2px dashed var(--chumbo);z-index:3;opacity:.75}
+.hoje-tag{position:absolute;top:-2px;transform:translateX(-50%);background:var(--chumbo);color:var(--areia);font-family:var(--mono);font-size:9px;letter-spacing:.6px;padding:3px 8px;border-radius:4px;white-space:nowrap;z-index:4}
+.gantt-corpo{position:relative}
+.rodape-bloco{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);margin-top:16px;font-family:var(--mono);flex-wrap:wrap;gap:8px}
+
+/* ---------- Funil / distribuições ---------- */
+.duo{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;margin:22px 32px 0}
+.funil{margin-top:20px}
+.f-lin{margin-bottom:14px}
+.f-top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+.f-top b{font-weight:650}
+.f-top span{font-family:var(--mono);font-size:11.5px;color:var(--txt2)}
+.f-bar{height:26px;background:var(--trilho);border-radius:5px;overflow:hidden}
+.f-bar div{height:100%;border-radius:5px;display:flex;align-items:center;font-family:var(--mono);font-size:11px;font-weight:700}
+.dist{margin-top:20px}
+.d-lin{display:flex;align-items:center;gap:12px;margin-bottom:11px;font-size:12.5px}
+.d-nome{flex:0 0 118px;color:var(--txt2)}
+.d-bar{flex:1;height:18px;background:var(--trilho);border-radius:4px;overflow:hidden}
+.d-bar div{height:100%;background:var(--cerrado);border-radius:4px}
+.d-val{flex:0 0 116px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--txt2);white-space:nowrap}
+.abas{display:flex;gap:6px;margin-top:4px}
+.aba{font-family:var(--mono);font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1px solid var(--linha);background:#fff;color:var(--txt2);cursor:pointer}
+.aba.on{background:var(--cerrado);border-color:var(--cerrado);color:var(--lima)}
+
+/* ---------- Tabela ---------- */
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.chip{font-size:11.5px;padding:6px 13px;border-radius:999px;border:1px solid var(--linha);background:#fff;cursor:pointer;color:var(--txt2);white-space:nowrap}
+.chip.on{background:var(--cerrado);color:var(--lima);border-color:var(--cerrado)}
+.tabela-scroll{overflow-x:auto}
+table{width:100%;min-width:1060px;border-collapse:collapse;margin-top:16px;font-size:12.5px}
+th:first-child,td:first-child{min-width:225px}
+td:nth-child(4){min-width:90px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.9px;text-transform:uppercase;color:var(--txt3);border-bottom:1px solid var(--linha);padding:9px 6px;font-weight:600;white-space:nowrap}
+td{padding:11px 6px;border-bottom:1px solid var(--trilho);vertical-align:top}
+tr:hover td{background:#FBF9F5}
+td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+td.dt{font-family:var(--mono);font-size:10.8px;color:var(--txt2);white-space:nowrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.p-ag{background:var(--lima);color:var(--cerrado)}
+.p-re{background:var(--cerrado);color:var(--areia)}
+.p-ef{background:var(--planalto);color:var(--chumbo)}
+.p-nr{background:#E6E5E1;color:var(--chumbo)}
+.p-ca{background:var(--chumbo);color:var(--areia)}
+.op-nome{font-weight:600;line-height:1.35}
+.op-sigla{font-family:var(--mono);font-size:10.5px;color:var(--txt3);margin-top:3px}
+.link{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.link:hover{color:var(--cerrado)}
+.link-dt{font-family:var(--mono);font-size:10.8px;color:var(--cerrado);text-decoration:underline dotted;text-underline-offset:3px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.link-dt .ico{width:12px;height:12px;flex:0 0 12px}
+.acoes{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.btn{font-size:12px;padding:9px 16px;border-radius:8px;border:1px solid var(--linha);background:#fff;cursor:pointer;color:var(--txt);font-weight:600}
+.btn.pri{background:var(--cerrado);color:var(--areia);border-color:var(--cerrado)}
+.btn:hover{border-color:var(--cerrado)}
+.rodape{margin:26px 32px 0;font-size:11.5px;color:var(--txt3);font-family:var(--mono);line-height:1.7}
+
+/* ---------- Modal de tratativas ---------- */
+dialog{border:0;border-radius:var(--raio);padding:0;max-width:640px;width:calc(100% - 32px);box-shadow:0 24px 60px rgba(47,48,42,.28);color:var(--txt)}
+dialog::backdrop{background:rgba(47,48,42,.45)}
+.md-top{background:var(--cerrado);color:var(--areia);padding:20px 24px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.md-top .sig{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--lima)}
+.md-top h3{margin:4px 0 0;font-size:17px;font-weight:750;line-height:1.3;color:#fff}
+.md-x{background:rgba(243,238,228,.14);border:0;color:var(--areia);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;flex:0 0 32px}
+.md-x:hover{background:rgba(243,238,228,.28)}
+.md-body{padding:22px 24px 26px}
+.md-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 18px;margin-bottom:20px}
+.md-grid .k{font-family:var(--mono);font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--txt3)}
+.md-grid .v{font-size:13px;margin-top:3px;font-weight:600}
+.md-h{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--cerrado);font-weight:700;margin:18px 0 10px}
+.tl{list-style:none;margin:0;padding:0;border-left:2px solid var(--linha);margin-left:6px}
+.tl li{position:relative;padding:0 0 12px 18px;font-size:12.5px}
+.tl li::before{content:"";position:absolute;left:-7px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--araguaia);border:2px solid #fff}
+.tl li.now::before{background:var(--ipe)}
+.tl li.sem::before{background:var(--chumbo)}
+.tl li .d{font-family:var(--mono);font-size:11px;color:var(--txt2);margin-right:8px}
+.md-nota{background:var(--planalto);border-left:4px solid var(--ipe);padding:12px 14px;border-radius:6px;font-size:13px;line-height:1.55;color:var(--chumbo)}
+.md-nota.sem{background:#F1F0EC;border-left-color:var(--chumbo)}
+
+@media (max-width:1240px){ .kpis{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:1000px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .duo{grid-template-columns:1fr}
+  .rotulo{width:150px;flex:0 0 150px}
+  .eixo{padding-left:150px}
+  .stepper{flex-wrap:wrap;gap:18px 0}
+  .step{flex:0 0 33.33%}
+  .step .conn{display:none}
+  .md-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .kpis{grid-template-columns:1fr;margin:-52px 16px 0}
+  .bloco,.duo,.rodape{margin-left:16px;margin-right:16px}
+  .hero{padding:26px 18px 74px}
+  .posicao{position:static;text-align:left;margin-top:14px}
+  .step{flex:0 0 50%}
+}
+@media print{
+  body{background:#fff}
+  .acoes,.filtros,.abas{display:none}
+  .bloco,.kpi{box-shadow:none;border:1px solid var(--linha)}
+  .itens{display:block !important}
+}
+*:focus-visible{outline:2px solid var(--cerrado);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ CABEÇALHO ============ -->
+<header class="hero">
+  <h1>Prospecção de Operadoras Parceiras</h1>
+  <p class="sub">Acompanhamento das tratativas para cessão e compartilhamento recíproco de rede assistencial, no âmbito do piloto do Projeto de Rede Assistencial Compartilhada.</p>
+  <div class="badges">
+    <span class="badge">Área de negócio: <b>GEPAS / COPAR</b></span>
+    <span class="badge">Fase EAP: <b>3.14 — Definir o piloto</b></span>
+    <span class="badge">Base normativa: <b>RN 137 · RN 509 · RN 517</b></span>
+  </div>
+  <div class="posicao">Posição em<strong id="dt-posicao"></strong></div>
+</header>
+
+<!-- ============ KPIs ============ -->
+<section class="kpis" id="kpis"></section>
+
+<!-- ============ JORNADA ============ -->
+<section class="bloco">
+  <h2>Jornada de prospecção</h2>
+  <p class="leg">Da identificação da operadora na base da ANS até a celebração do convênio de reciprocidade.</p>
+  <div class="stepper" id="stepper"></div>
+</section>
+
+<!-- ============ CRONOGRAMA ============ -->
+<section class="bloco">
+  <div class="head-flex">
+    <div>
+      <h2>Cronograma detalhado</h2>
+      <p class="leg">Clique em uma etapa para ver as operadoras que a compõem. Os losangos marcam reuniões técnicas; clique neles para ver as notas.</p>
+    </div>
+    <div class="legenda">
+      <span><i style="background:var(--araguaia)"></i>Concluída</span>
+      <span><i style="background:var(--ipe)"></i>Em andamento</span>
+      <span><i style="background:var(--chumbo)"></i>Sem retorno / cancelada</span>
+      <span><i style="background:var(--neutro)"></i>Não iniciada</span>
+      <span><i class="lg-marco" style="background:var(--ipe)"></i>Reunião técnica</span>
+    </div>
+  </div>
+  <div class="gantt">
+    <div class="eixo" id="eixo"></div>
+    <div class="gantt-corpo" id="gantt"></div>
+  </div>
+  <div class="rodape-bloco">
+    <span>Fonte: tabela_operadoras_reciprocidade · GEPAS/COPAR — Ipasgo Saúde</span>
+    <span id="rod-meta"></span>
+  </div>
+</section>
+
+<!-- ============ FUNIL + DISTRIBUIÇÃO ============ -->
+<div class="duo">
+  <section class="bloco" style="margin:0">
+    <h2>Funil de conversão</h2>
+    <p class="leg">Operadoras ativas em cada etapa e vidas correspondentes.</p>
+    <div class="funil" id="funil"></div>
+  </section>
+  <section class="bloco" style="margin:0">
+    <div class="head-flex">
+      <div><h2>Distribuição da carteira</h2><p class="leg">Vidas mapeadas em Goiás, por recorte.</p></div>
+      <div class="abas" id="abas">
+        <button class="aba on" data-eixo="Localização da OPS">Sede da OPS</button>
+        <button class="aba" data-eixo="Atualização do Andamento">Status</button>
+        <button class="aba" data-eixo="Colaborador Responsável">Responsável</button>
+      </div>
+    </div>
+    <div class="dist" id="dist"></div>
+  </section>
+</div>
+
+<!-- ============ CARTEIRA ============ -->
+<section class="bloco">
+  <div class="head-flex">
+    <div><h2>Carteira prospectada</h2><p class="leg">Registro analítico das tratativas por operadora. As vidas correspondem exclusivamente aos beneficiários da operadora residentes em Goiás. Clique na operadora ou na data da reunião para abrir o registro da tratativa.</p></div>
+  </div>
+  <div class="filtros" id="filtros"></div>
+  <div class="tabela-scroll">
+    <table id="tabela">
+      <thead><tr>
+        <th>Operadora</th><th>Reg. ANS</th><th>CNPJ</th><th>Sede da OPS</th>
+        <th style="text-align:right">Vidas em GO</th><th>Responsável</th>
+        <th>1º contato</th><th>Atualização</th><th>Interesse</th><th>Situação</th><th>Reunião</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="acoes">
+    <button class="btn pri" onclick="window.print()">Imprimir / salvar em PDF</button>
+    <button class="btn" onclick="exportarCSV()">Baixar CSV</button>
+  </div>
+</section>
+
+<p class="rodape">
+  Ipasgo Saúde — Operadora de autogestão registrada na ANS · Diretoria de Relações com o Mercado (DIREP) · Gerência de Parcerias (GEPAS) · Coordenação de Gestão de Parcerias (COPAR)<br>
+  Documento de trabalho de uso interno. As datas das etapas 5 e 6 são projeções de planejamento e devem ser revistas a cada ciclo de atualização.
+</p>
+
+</div>
+
+<!-- ============ MODAL ============ -->
+<dialog id="modal" aria-labelledby="md-titulo">
+  <div class="md-top">
+    <div><div class="sig" id="md-sigla"></div><h3 id="md-titulo"></h3></div>
+    <button class="md-x" onclick="document.getElementById('modal').close()" aria-label="Fechar">×</button>
+  </div>
+  <div class="md-body" id="md-body"></div>
+</dialog>
+
+<script>
+/* =====================================================================
+   1. CONFIGURAÇÃO — altere apenas este bloco no dia a dia
+   ===================================================================== */
+const CFG = {
+  posicao:      "2026-09-16",   // data de referência do painel
+  inicioLinha:  "2026-07-14",   // início do eixo do cronograma
+  fimLinha:     "2026-11-30"    // fim do eixo do cronograma
+};
+
+/* Operadoras — espelha a planilha tabela_operadoras_reciprocidade.
+   situacao : "Contato efetivo" | "Reunião Agendada" | "Reunião realizada" |
+              "Reunião cancelada" | "Não responde" | "Não conseguiu contato" |
+              "Em negociação" | "Convênio celebrado"
+   interesse: "Sim" | "Não"  (coluna "Manifestação de Interesse na Reunião")
+   vidas    : beneficiários da operadora residentes em Goiás.
+   reuniao  : null ou {data, hora, status:"agendada"|"realizada"|"cancelada", notas}
+   nota     : observação livre sobre a tratativa, exibida no registro da operadora
+   Regras automáticas:
+     · reunião "agendada" → situação vira "Reunião Agendada";
+     · reunião "realizada" → "Reunião realizada"; "cancelada" → "Reunião cancelada";
+     · o indicador "Interesse em reunir" só considera quem manifestou interesse
+       e ainda não possui data de reunião.                                    */
+const OPERADORAS = [
+ {ans:312126, nome:"Fundação Saúde Itaú", sigla:"FUNDAÇÃO SAÚDE ITAÚ", cnpj:"73.809.352/0001-66", resp:"Nathalya", vidas:1914, sede:"Belo Horizonte", mapeamento:"2026-07-19", contato:"2026-08-06", atualizacao:"2026-08-27", situacao:"Não conseguiu contato", interesse:"Não", reuniao:null},
+ {ans:361461, nome:"Vivacom Planos de Saúde", sigla:"VIVACOM", cnpj:"37.880.952/0001-57", resp:"Yasmin", vidas:10634, sede:"Goiânia", mapeamento:"2026-07-19", contato:"2026-08-04", atualizacao:"2026-09-01", situacao:"Reunião realizada", interesse:"Sim",
+  reuniao:{data:"2026-09-01", hora:null, status:"realizada", notas:"A operadora manifestou que seu interesse se restringe à cessão de garantia de atendimento pelo Ipasgo Saúde, não abrangendo, por ora, a reciprocidade de rede."}},
+ {ans:306754, nome:"Associação dos Funcionários do Fisco do Estado de Goiás", sigla:"AFFEGO", cnpj:"00.299.149/0001-13", resp:"Nathalya", vidas:5637, sede:"Goiânia", mapeamento:"2026-07-19", contato:"2026-08-06", atualizacao:"2026-08-27", situacao:"Contato efetivo", interesse:"Sim", reuniao:null},
+ {ans:331317, nome:"Real Grandeza — Fundação de Previdência e Assistência Social", sigla:"REAL GRANDEZA", cnpj:"34.269.803/0001-68", resp:"Arthur", vidas:1113, sede:"Rio de Janeiro", mapeamento:"2026-07-19", contato:"2026-08-05", atualizacao:"2026-08-27", situacao:"Não responde", interesse:"Não", reuniao:null},
+ {ans:334189, nome:"Companhia Nacional de Abastecimento", sigla:"CONAB", cnpj:"26.461.699/0001-80", resp:"Yasmin", vidas:698, sede:"Brasília", mapeamento:"2026-07-19", contato:"2026-08-18", atualizacao:"2026-08-27", situacao:"Não responde", interesse:"Não", reuniao:null},
+ {ans:361011, nome:"Sindicato Nacional dos Auditores Fiscais da Receita Federal do Brasil", sigla:"SINDIFISCO NACIONAL", cnpj:"03.657.699/0001-55", resp:"Yasmin", vidas:366, sede:"Brasília", mapeamento:"2026-07-19", contato:"2026-08-20", atualizacao:"2026-08-27", situacao:"Não responde", interesse:"Não", reuniao:null},
+ {ans:363855, nome:"Caixa de Assistência dos Empregados da Saneago", sigla:"CAESAN", cnpj:"37.382.009/0001-14", resp:"Nathalya", vidas:16209, sede:"Goiânia", mapeamento:"2026-07-19", contato:"2026-08-07", atualizacao:"2026-09-14", situacao:"Reunião cancelada", interesse:"Sim",
+  reuniao:{data:"2026-09-02", hora:null, status:"cancelada", notas:"Reunião cancelada pela operadora. Desde então, não há retorno às tentativas de contato da COPAR."}},
+ {ans:402206, nome:"Serviço de Assistência Médica aos Membros do Ministério Público", sigla:"SAMP / AGMP", cnpj:"08.408.751/0001-53", resp:"Arthur", vidas:1473, sede:"Goiânia", mapeamento:"2026-07-19", contato:"2026-08-20", atualizacao:"2026-09-14", situacao:"Reunião Agendada", interesse:"Sim",
+  reuniao:{data:"2026-09-21", hora:"15:00", status:"agendada", notas:null}},
+ {ans:416401, nome:"Caixa de Assistência dos Empregados da Embrapa", sigla:"CASEMBRAPA", cnpj:"08.097.092/0001-81", resp:"Nathalya", vidas:895, sede:"Brasília", mapeamento:"2026-07-19", contato:"2026-08-04", atualizacao:"2026-08-27", situacao:"Não responde", interesse:"Não", reuniao:null},
+ {ans:417238, nome:"BRF S/A", sigla:"BRF", cnpj:"01.838.723/0001-27", resp:"Arthur", vidas:15024, sede:"Itajaí — SC", mapeamento:"2026-07-19", contato:"2026-08-06", atualizacao:"2026-08-27", situacao:"Não conseguiu contato", interesse:"Não", reuniao:null},
+ {ans:422631, nome:"Associação Petrobras de Saúde", sigla:"APS", cnpj:"39.427.632/0001-71", resp:"Yasmin", vidas:432, sede:"Rio de Janeiro", mapeamento:"2026-07-19", contato:"2026-08-05", atualizacao:"2026-08-27", situacao:"Não conseguiu contato", interesse:"Não", reuniao:null},
+ {ans:null,   nome:"Caixa de Assistência dos Empregados do Setor Público do Estado de Goiás", sigla:"CAEME", cnpj:"33.601.568/0001-17", resp:"Vitor", vidas:737, sede:"Goiânia", mapeamento:"2026-09-14", contato:"2026-09-14", atualizacao:"2026-09-16", situacao:"Reunião realizada", interesse:"Sim",
+  reuniao:{data:"2026-09-16", hora:"14:30", status:"realizada", notas:"A operadora manifestou interesse na cessão de rede do Ipasgo Saúde. Informou já manter cessão de rede vigente com a Unimed Cerrado. O Sr. Gilson, representante da CAEME, encaminhou os dados dessa relação contratual, que subsidiarão a elaboração de proposta pela COPAR."}},
+ {ans:415065, nome:"Mais Saúde", sigla:"MAIS SAÚDE", cnpj:"00.395.266/0001-80", resp:"Yasmin", vidas:22246, sede:"Goiânia", mapeamento:"2026-09-15", contato:"2026-09-15", atualizacao:"2026-09-15", situacao:"Contato efetivo", interesse:"Sim", reuniao:null,
+  nota:"Aguardando agendamento de reunião."},
+ {ans:424561, nome:"NovaMed", sigla:"NOVAMED", cnpj:"59.545.401/0001-70", resp:"Nathalya", vidas:1990, sede:"Goiânia", mapeamento:"2026-09-15", contato:"2026-09-15", atualizacao:"2026-09-15", situacao:"Contato efetivo", interesse:"Sim", reuniao:null,
+  nota:"Aguardando agendamento de reunião."}
+];
+
+/* Etapas da jornada. Datas de 1 e 2 são derivadas da base; 3 a 6 são planejamento. */
+const ATIVAS = ["Contato efetivo","Reunião Agendada","Reunião realizada","Em negociação","Convênio celebrado"];
+const ETAPAS = [
+ {n:1, nome:"Mapeamento da carteira", ini:"auto:mapeamento", fim:"auto:mapeamento", filtro:()=>OPERADORAS, concluidas:()=>OPERADORAS,
+  campo:o=>[o.mapeamento,o.mapeamento], desc:"Identificação das operadoras elegíveis na base da ANS."},
+ {n:2, nome:"Primeiro contato", ini:"auto:contato", fim:"auto:contato", filtro:()=>OPERADORAS, concluidas:()=>OPERADORAS,
+  campo:o=>[o.contato,o.contato], desc:"Abertura formal de tratativas com a operadora."},
+ {n:3, nome:"Qualificação do contato", ini:"auto:contato", fim:"2026-09-30", filtro:()=>OPERADORAS,
+  concluidas:()=>OPERADORAS.filter(o=>ATIVAS.includes(o.situacao)),
+  campo:o=>[o.contato,o.atualizacao], desc:"Obtenção de interlocutor técnico e retorno efetivo."},
+ {n:4, nome:"Reunião técnica", ini:"2026-09-01", fim:"2026-09-30", marco:true,
+  /* Só entram nesta etapa as operadoras com data de reunião registrada.
+     Quem manifestou interesse mas ainda não tem data permanece na etapa 3
+     e continua no indicador "Interesse em reunir". */
+  filtro:()=>OPERADORAS.filter(o=>o.reuniao),
+  concluidas:()=>OPERADORAS.filter(o=>(o.reuniao&&o.reuniao.status==="realizada")||["Em negociação","Convênio celebrado"].includes(o.situacao)),
+  campo:o=>o.reuniao?[o.reuniao.data,o.reuniao.data]:null, desc:"Alinhamento de parâmetros, rede e regras de reciprocidade."},
+ {n:5, nome:"Negociação e minuta do convênio", ini:"2026-09-15", fim:"2026-10-31", filtro:()=>OPERADORAS.filter(o=>["Em negociação","Convênio celebrado"].includes(o.situacao)),
+  concluidas:()=>OPERADORAS.filter(o=>o.situacao==="Convênio celebrado"), campo:o=>null,
+  desc:"Análise jurídica, tabela de preços e instrumento contratual."},
+ {n:6, nome:"Celebração do convênio", ini:"2026-11-03", fim:"2026-11-28", filtro:()=>OPERADORAS.filter(o=>o.situacao==="Convênio celebrado"),
+  concluidas:()=>OPERADORAS.filter(o=>o.situacao==="Convênio celebrado"), campo:o=>null,
+  desc:"Assinatura, publicação e início da operação-piloto."}
+];
+
+/* =====================================================================
+   2. MOTOR — não precisa alterar
+   ===================================================================== */
+const D = s => new Date(s+"T00:00:00");
+const HOJE = D(CFG.posicao), INI = D(CFG.inicioLinha), FIM = D(CFG.fimLinha);
+const SPAN = FIM - INI;
+const pos = d => ((D(d)-INI)/SPAN)*100;
+const fmt = d => d ? D(d).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"}) : "—";
+const fmtL = d => d ? D(d).toLocaleDateString("pt-BR") : "—";
+const fmtC = d => d ? D(d).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"2-digit"}) : "—";
+const fmtX = d => d ? D(d).toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}) : "—";
+const num = n => n.toLocaleString("pt-BR");
+const dias = (a,b) => Math.round((D(b)-D(a))/864e5);
+const soma = a => a.reduce((s,o)=>s+o.vidas,0);
+/* Lista as siglas ordenadas por vidas; acima de 4, resume o excedente. */
+const siglas = (ops, max=4) => {
+  const o = [...ops].sort((a,b)=>b.vidas-a.vidas).map(x=>x.sigla);
+  return o.length>max ? o.slice(0,max).join(", ")+" +"+(o.length-max) : o.join(", ");
+};
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+
+/* Normalização: o status da reunião prevalece sobre o texto da situação. */
+OPERADORAS.forEach(o=>{
+  if(!o.reuniao || ["Em negociação","Convênio celebrado"].includes(o.situacao)) return;
+  o.situacao = {agendada:"Reunião Agendada", realizada:"Reunião realizada", cancelada:"Reunião cancelada"}[o.reuniao.status] || o.situacao;
+});
+/* Datas automáticas das etapas (min/max da base). */
+ETAPAS.forEach(e=>{
+  ["ini","fim"].forEach(k=>{
+    if(String(e[k]).startsWith("auto:")){
+      const c=e[k].slice(5), ds=OPERADORAS.map(o=>o[c]).filter(Boolean).sort();
+      e[k] = k==="ini"?ds[0]:ds[ds.length-1];
+    }
+  });
+});
+
+const TOTAL = soma(OPERADORAS), N = OPERADORAS.length;
+const efetivas   = OPERADORAS.filter(o=>ATIVAS.includes(o.situacao));
+const agendadas  = OPERADORAS.filter(o=>o.reuniao&&o.reuniao.status==="agendada");
+const realizadas = OPERADORAS.filter(o=>o.reuniao&&o.reuniao.status==="realizada");
+const canceladas = OPERADORAS.filter(o=>o.reuniao&&o.reuniao.status==="cancelada");
+const interessadas = OPERADORAS.filter(o=>o.interesse==="Sim" && !o.reuniao && ATIVAS.includes(o.situacao));
+const proxima = agendadas.filter(o=>D(o.reuniao.data)>=HOJE).sort((a,b)=>D(a.reuniao.data)-D(b.reuniao.data))[0];
+
+const CLASSE = {"Reunião Agendada":"p-ag","Reunião realizada":"p-re","Em negociação":"p-re","Convênio celebrado":"p-re",
+                "Contato efetivo":"p-ef","Não responde":"p-nr","Não conseguiu contato":"p-nr","Reunião cancelada":"p-ca"};
+
+document.getElementById("dt-posicao").textContent = fmtL(CFG.posicao);
+document.getElementById("rod-meta").textContent = "Eixo: "+fmtL(CFG.inicioLinha)+" a "+fmtL(CFG.fimLinha);
+
+/* ---- KPIs ---- */
+const taxa = Math.round(efetivas.length/N*100);
+const reuNota = [];
+if(proxima){
+  const d = dias(CFG.posicao, proxima.reuniao.data);
+  const quando = d===0 ? "hoje" : d===1 ? "amanhã" : "em "+d+" dias";
+  reuNota.push("próxima: "+proxima.sigla+" "+quando+(proxima.reuniao.hora?" às "+proxima.reuniao.hora:"")+" ("+fmt(proxima.reuniao.data)+")");
+}
+if(realizadas.length) reuNota.push(realizadas.length+" realizada"+(realizadas.length>1?"s":""));
+if(canceladas.length) reuNota.push(canceladas.length+" cancelada"+(canceladas.length>1?"s":""));
+const kpis = [
+ {rot:"Carteira prospectada", val:N+" <small>operadoras</small>", nota:num(TOTAL)+" vidas em Goiás · "+new Set(OPERADORAS.map(o=>o.sede)).size+" sedes"},
+ {rot:"Contato efetivo", donut:taxa, val:efetivas.length+" <small>de "+N+"</small>", nota:num(soma(efetivas))+" vidas ("+Math.round(soma(efetivas)/TOTAL*100)+"% do potencial)"},
+ {rot:"Interesse em reunir", val:interessadas.length+" <small>pendente"+(interessadas.length==1?"":"s")+"</small>",
+  nota: interessadas.length
+        ? siglas(interessadas)+" · "+num(soma(interessadas))+" vidas sem data definida"
+        : "Nenhum interesse sem data definida"},
+ {rot:"Reuniões técnicas", val:agendadas.length+" <small>agendada"+(agendadas.length==1?"":"s")+"</small>", nota: reuNota.join(" · ") || "Nenhuma reunião agendada"},
+ {rot:"Sem retorno", val:(N-efetivas.length)+" <small>operadoras</small>", nota:num(TOTAL-soma(efetivas))+" vidas represadas · exige reabordagem"}
+];
+document.getElementById("kpis").innerHTML = kpis.map(k=>{
+  const donut = k.donut!==undefined ? `<svg class="donut-svg" viewBox="0 0 42 42" width="56" height="56" role="img" aria-label="${k.donut}%">
+      <circle cx="21" cy="21" r="16" fill="none" stroke="#F3EEE4" stroke-width="5"/>
+      <circle cx="21" cy="21" r="16" fill="none" stroke="#007940" stroke-width="5" stroke-linecap="round"
+        stroke-dasharray="${(k.donut/100*100.53).toFixed(1)} 100.53" transform="rotate(-90 21 21)"/>
+      <text x="21" y="24.5" text-anchor="middle">${k.donut}%</text></svg>` : "";
+  return `<article class="kpi${donut?" donut":""}">${donut}<div><div class="rot">${k.rot}</div>
+    <div class="val">${k.val}</div><div class="nota">${k.nota}</div></div></article>`;
+}).join("");
+
+/* ---- Stepper ---- */
+const estado = e => {
+  const tot=e.filtro().length, ok=e.concluidas().length, pct=tot?Math.round(ok/tot*100):0;
+  const st = pct===100&&tot>0 ? "ok" : (D(e.ini)<=HOJE&&tot>0 ? "now" : "off");
+  return {tot,ok,pct,st};
+};
+const atualIdx = ETAPAS.findIndex(x=>estado(x).st!=="ok");
+document.getElementById("stepper").innerHTML = ETAPAS.map((e,i)=>{
+  const {tot,ok,pct,st} = estado(e);
+  const prox = ETAPAS[i+1] ? estado(ETAPAS[i+1]).st : null;
+  const conn = st==="ok" ? (prox==="ok"?"ok":"mid") : (st==="now"?"now":"");
+  return `<div class="step">
+    <div class="conn ${conn}"></div>
+    ${i===atualIdx?'<span class="aqui">VOCÊ ESTÁ AQUI</span>':''}
+    <div class="bola ${st}">${st==="ok"?"✓":e.n}</div>
+    <div class="nome">${e.nome}</div>
+    <div class="pct">${pct}%${tot?` · ${ok}/${tot}`:""}</div></div>`;
+}).join("");
+
+/* ---- Eixo ---- */
+const marcos = [];
+for(let d=new Date(INI); d<=FIM; d.setDate(d.getDate()+14)) marcos.push(new Date(d));
+document.getElementById("eixo").innerHTML = marcos.map(d=>
+  `<span>${d.toLocaleDateString("pt-BR",{day:"2-digit",month:"short"}).replace(".","")}</span>`).join("");
+
+/* ---- Gantt ---- */
+const idx = o => OPERADORAS.indexOf(o);
+document.getElementById("gantt").innerHTML = ETAPAS.map((e,i)=>{
+  const {tot,ok,pct,st} = estado(e);
+  const cls = st==="ok"?"b-ok":st==="now"?"b-now":"b-off";
+  const l = pos(e.ini);
+  const corta = st==="now" && D(e.fim)>HOJE;                     // barra limitada ao hoje
+  const w = Math.max((corta?pos(CFG.posicao):pos(e.fim))-l, 1.2);
+  const plan = corta ? `<span class="barra b-plan" style="left:${l}%;width:${pos(e.fim)-l}%"></span>` : "";
+  const dentro = w >= 5.5;                                        // rótulo fora se a barra for estreita
+  const rotulo = dentro ? "" : `<span class="barra-rot" style="left:calc(${l+w}% + 7px)">${pct}%</span>`;
+  const situ = st==="ok"?"Concluída":st==="now"?"Em andamento":"Não iniciada";
+  const itens = e.filtro().map(o=>{
+    const c = e.campo(o);
+    let vis = "";
+    if(c && e.marco){                                             // reunião = losango na data
+      const m = o.reuniao.status==="realizada"?"m-ok":o.reuniao.status==="cancelada"?"m-sem":"m-now";
+      const tt = fmtL(o.reuniao.data)+(o.reuniao.hora?" às "+o.reuniao.hora:"")+" · "+o.reuniao.status;
+      vis = `<span class="marco ${m}" style="left:${pos(c[0])}%" title="${esc(tt)}" onclick="abrir(${idx(o)})" role="button" tabindex="0" aria-label="${esc(o.sigla+': reunião '+tt)}"></span>
+             <span class="barra-rot" style="left:calc(${pos(c[0])}% + 12px)">${fmt(c[0])}${o.reuniao.hora?" "+o.reuniao.hora:""}</span>`;
+    } else if(c){
+      const cFim = D(c[1])>HOJE ? CFG.posicao : c[1];
+      let li = pos(c[0]); const lw = Math.max(pos(cFim)-li, 0.9);
+      if(li+lw > pos(CFG.posicao)) li = pos(CFG.posicao)-lw;         // nunca ultrapassa o hoje
+      const b = e.n===3 ? (ATIVAS.includes(o.situacao)?"b-ok":"b-sem") : "b-ok";
+      vis = `<span class="barra ${b}" style="left:${li}%;width:${lw}%"></span>`;
+    }
+    return `<div class="item"><div class="rotulo"><button class="link op" onclick="abrir(${idx(o)})">${o.sigla}</button>
+      <div class="sub">${num(o.vidas)} vidas · ${o.resp} · sede ${o.sede}</div></div>
+      <div class="trilha">${vis}</div></div>`;
+  }).join("") || `<div class="item"><div class="rotulo"><div class="sub">Nenhuma operadora nesta etapa.</div></div><div class="trilha"></div></div>`;
+  return `<div class="fase${i===atualIdx?" aberta":""}">
+    <div class="fase-lin" role="button" tabindex="0" onclick="this.parentNode.classList.toggle('aberta')"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.parentNode.classList.toggle('aberta')}">
+      <div class="rotulo"><span class="seta">▶</span><div><div class="tit">${e.nome}</div>
+        <div class="meta">${fmt(e.ini)} — ${fmt(e.fim)} · ${situ}</div></div></div>
+      <div class="trilha"><span class="trilho-bg"></span>${plan}
+        <span class="barra ${cls}" style="left:${l}%;width:${w}%">${dentro?pct+"%":""}</span>${rotulo}</div>
+    </div>
+    <div class="itens">${itens}</div></div>`;
+}).join("") + `<div class="hoje" style="left:calc(250px + (100% - 250px) * ${pos(CFG.posicao)/100})">
+    <span class="hoje-tag">HOJE · ${fmt(CFG.posicao)}</span></div>`;
+
+/* ---- Funil ---- */
+const funil = [
+ {nome:"Mapeadas na base da ANS", ops:OPERADORAS, cor:"var(--cerrado)", txt:"var(--areia)"},
+ {nome:"Primeiro contato realizado", ops:OPERADORAS.filter(o=>o.contato), cor:"var(--cerrado)", txt:"var(--areia)"},
+ {nome:"Contato efetivo (ativas)", ops:efetivas, cor:"var(--araguaia)", txt:"var(--areia)"},
+ {nome:"Interesse manifestado", ops:efetivas.filter(o=>o.interesse==="Sim"), cor:"var(--araguaia)", txt:"var(--areia)"},
+ {nome:"Reunião técnica agendada ou realizada", ops:OPERADORAS.filter(o=>o.reuniao&&o.reuniao.status!=="cancelada"), cor:"var(--lima)", txt:"var(--cerrado)"},
+ {nome:"Reunião técnica realizada", ops:realizadas, cor:"var(--lima)", txt:"var(--cerrado)"},
+ {nome:"Em negociação de minuta", ops:OPERADORAS.filter(o=>o.situacao==="Em negociação"), cor:"var(--ipe)", txt:"var(--chumbo)"},
+ {nome:"Convênio celebrado", ops:OPERADORAS.filter(o=>o.situacao==="Convênio celebrado"), cor:"var(--cerrado)", txt:"var(--areia)"}
+];
+document.getElementById("funil").innerHTML = funil.map(f=>{
+  const p = f.ops.length/N*100;
+  return `<div class="f-lin"><div class="f-top"><b>${f.nome}</b>
+    <span>${f.ops.length}/${N} · ${num(soma(f.ops))} vidas</span></div>
+    <div class="f-bar"><div style="width:${p}%;background:${f.cor};color:${f.txt};padding-left:${f.ops.length?10:0}px">${f.ops.length?Math.round(p)+"%":""}</div></div></div>`;
+}).join("");
+
+/* ---- Distribuição ---- */
+function distribuir(eixo){
+  const chave = {"Localização da OPS":"sede","Atualização do Andamento":"situacao","Colaborador Responsável":"resp"}[eixo];
+  const g = {};
+  OPERADORAS.forEach(o=>{const k=o[chave]; g[k]=g[k]||{v:0,n:0}; g[k].v+=o.vidas; g[k].n++;});
+  const arr = Object.entries(g).sort((a,b)=>b[1].v-a[1].v);
+  const max = arr[0][1].v;
+  document.getElementById("dist").innerHTML = arr.map(([k,v])=>
+    `<div class="d-lin"><div class="d-nome">${k}</div>
+     <div class="d-bar"><div style="width:${v.v/max*100}%"></div></div>
+     <div class="d-val">${num(v.v)} · ${v.n} op.</div></div>`).join("")
+    + `<p class="leg" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--linha)">`
+    + (chave==="sede"
+        ? `Os locais indicam a <b>sede da operadora</b>, não a residência dos beneficiários: todas as vidas contabilizadas são exclusivamente de beneficiários situados em Goiás. Operadoras sediadas em ${arr[0][0]} respondem por ${Math.round(arr[0][1].v/TOTAL*100)}% das ${num(TOTAL)} vidas mapeadas no Estado.`
+        : `${arr[0][0]} concentra ${Math.round(arr[0][1].v/TOTAL*100)}% das vidas mapeadas em Goiás (${num(arr[0][1].v)} de ${num(TOTAL)}).`)
+    + `</p>`;
+}
+distribuir("Localização da OPS");
+document.getElementById("abas").addEventListener("click",e=>{
+  if(!e.target.dataset.eixo) return;
+  document.querySelectorAll(".aba").forEach(a=>a.classList.remove("on"));
+  e.target.classList.add("on"); distribuir(e.target.dataset.eixo);
+});
+
+/* ---- Tabela + filtros ---- */
+const ICO = `<svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 2.5h10v11H3z"/><path d="M5.5 6h5M5.5 8.5h5M5.5 11h3"/></svg>`;
+const situacoes = [...new Set(OPERADORAS.map(o=>o.situacao))];
+let filtro = "Todas";
+document.getElementById("filtros").innerHTML =
+  ["Todas",...situacoes].map(s=>`<button class="chip${s==="Todas"?" on":""}" data-f="${s}">${s} (${s==="Todas"?N:OPERADORAS.filter(o=>o.situacao===s).length})</button>`).join("");
+document.getElementById("filtros").addEventListener("click",e=>{
+  if(!e.target.dataset.f) return;
+  filtro = e.target.dataset.f;
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));
+  e.target.classList.add("on"); render();
+});
+function render(){
+  const lista = filtro==="Todas"?OPERADORAS:OPERADORAS.filter(o=>o.situacao===filtro);
+  document.getElementById("tbody").innerHTML = [...lista]
+    .sort((a,b)=>b.vidas-a.vidas).map(o=>{
+    const r = o.reuniao;
+    const reu = r ? `<button class="link link-dt" onclick="abrir(${idx(o)})" title="Abrir registro da reunião">${fmtC(r.data)}${r.hora?" · "+r.hora:""}${r.notas?ICO:""}</button>`
+                  : (o.nota ? `<button class="link link-dt" onclick="abrir(${idx(o)})" title="${esc(o.nota)}">a definir ${ICO}</button>` : "—");
+    return `<tr>
+    <td><button class="link" onclick="abrir(${idx(o)})"><div class="op-nome">${o.nome}</div><div class="op-sigla">${o.sigla}</div></button></td>
+    <td class="num">${o.ans??"<span title='Registro ANS a confirmar'>—</span>"}</td><td class="dt">${o.cnpj}</td><td>${o.sede}</td>
+    <td class="num">${num(o.vidas)}</td><td>${o.resp}</td>
+    <td class="dt">${fmtC(o.contato)}</td><td class="dt">${fmtC(o.atualizacao)}</td>
+    <td><span class="pill ${o.interesse==="Sim"?"p-ag":"p-nr"}">${o.interesse}</span></td>
+    <td><span class="pill ${CLASSE[o.situacao]||"p-nr"}">${o.situacao}</span></td>
+    <td class="dt">${reu}</td></tr>`;}).join("");
+}
+render();
+
+/* ---- Modal: registro da tratativa ---- */
+function abrir(i){
+  const o = OPERADORAS[i], r = o.reuniao;
+  document.getElementById("md-sigla").textContent = o.sigla + (o.ans?" · REG. ANS "+o.ans:"");
+  document.getElementById("md-titulo").textContent = o.nome;
+  const tl = [
+    {d:o.mapeamento, t:"Mapeamento na base da ANS", c:""},
+    {d:o.contato, t:"Primeiro contato — "+o.resp, c:""},
+  ];
+  if(r) tl.push({d:r.data, t:"Reunião técnica "+r.status+(r.hora?" · "+r.hora:""), c:r.status==="realizada"?"":r.status==="cancelada"?"sem":"now"});
+  tl.push({d:o.atualizacao, t:"Última atualização — "+o.situacao, c:ATIVAS.includes(o.situacao)?"":"sem"});
+  tl.sort((a,b)=>D(a.d)-D(b.d));
+  document.getElementById("md-body").innerHTML = `
+    <div class="md-grid">
+      <div><div class="k">CNPJ</div><div class="v">${o.cnpj}</div></div>
+      <div><div class="k">Sede</div><div class="v">${o.sede}</div></div>
+      <div><div class="k">Vidas em Goiás</div><div class="v">${num(o.vidas)}</div></div>
+      <div><div class="k">Responsável</div><div class="v">${o.resp}</div></div>
+      <div><div class="k">Interesse em reunir</div><div class="v">${o.interesse}</div></div>
+      <div><div class="k">Situação</div><div class="v"><span class="pill ${CLASSE[o.situacao]||"p-nr"}">${o.situacao}</span></div></div>
+    </div>
+    ${o.nota ? `<div class="md-h">Observação</div><div class="md-nota">${esc(o.nota)}</div>` : ""}
+    <div class="md-h">Linha do tempo da tratativa</div>
+    <ul class="tl">${tl.map(x=>`<li class="${x.c}"><span class="d">${fmtL(x.d)}</span>${x.t}</li>`).join("")}</ul>
+    ${r ? `<div class="md-h">Reunião técnica — ${fmtX(r.data)}${r.hora?", às "+r.hora:""}</div>
+           ${r.notas ? `<div class="md-nota${r.status==="cancelada"?" sem":""}">${esc(r.notas)}</div>`
+                     : `<p class="leg" style="margin:0">Sem notas registradas. Após a reunião, preencha o campo <code>notas</code> da operadora no arquivo.</p>`}` : ""}`;
+  document.getElementById("modal").showModal();
+}
+document.getElementById("modal").addEventListener("click",e=>{ if(e.target.id==="modal") e.target.close(); });
+
+function exportarCSV(){
+  const cab = ["Registro ANS","Operadora","CNPJ","Responsável","Vidas em GO","Sede da OPS","Mapeamento","1º Contato","Última Atualização","Situação","Manifestação de Interesse na Reunião","Data da Reunião","Hora","Status da Reunião","Notas da Reunião","Observação"];
+  const linhas = OPERADORAS.map(o=>[o.ans??"",o.nome,o.cnpj,o.resp,o.vidas,o.sede,fmtL(o.mapeamento),fmtL(o.contato),fmtL(o.atualizacao),o.situacao,o.interesse,
+    o.reuniao?fmtL(o.reuniao.data):"", o.reuniao?.hora||"", o.reuniao?.status||"", o.reuniao?.notas||"", o.nota||""]);
+  const csv = "\uFEFF"+[cab,...linhas].map(l=>l.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(";")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download = "prospeccao_operadoras_"+CFG.posicao+".csv"; a.click();
+}
+</script>
+</body>
+</html>
