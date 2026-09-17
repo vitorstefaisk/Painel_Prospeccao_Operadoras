@@ -2,7 +2,7 @@ name: Atualiza data do painel
 
 on:
   schedule:
-    - cron: "0 12 * * *"   # 09:00 (America/Sao_Paulo, UTC-3) todos os dias
+    - cron: "0 3 * * *"    # 00:00 (America/Sao_Paulo, UTC-3) todos os dias
   workflow_dispatch:        # permite disparo manual pela aba Actions
 
 permissions:
