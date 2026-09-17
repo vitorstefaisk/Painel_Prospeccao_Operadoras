@@ -1,0 +1,30 @@
+name: Atualiza data do painel
+
+on:
+  schedule:
+    - cron: "0 12 * * *"   # 09:00 (America/Sao_Paulo, UTC-3) todos os dias
+  workflow_dispatch:        # permite disparo manual pela aba Actions
+
+permissions:
+  contents: write
+
+jobs:
+  update-date:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Atualiza data de referência (CFG.posicao)
+        run: |
+          HOJE=$(TZ="America/Sao_Paulo" date +%Y-%m-%d)
+          sed -i -E "s/(posicao:[[:space:]]*)\"[0-9]{4}-[0-9]{2}-[0-9]{2}\"/\1\"$HOJE\"/" index.html
+
+      - name: Commit e push se houve alteração
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet index.html; then
+            git add index.html
+            git commit -m "Atualiza data de referência do painel"
+            git push
+          fi
