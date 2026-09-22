@@ -54,6 +54,17 @@ body{margin:0;background:var(--areia);font-family:var(--sans);color:var(--txt);-
 .bloco p.leg{margin:5px 0 0;font-size:13px;color:var(--txt2)}
 .head-flex{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
 
+/* ---------- Ponto de atenção ---------- */
+.alerta{background:var(--planalto);border-left:5px solid var(--ipe);border-radius:var(--raio);margin:22px 32px 0;padding:22px 26px}
+.alerta .alerta-h{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:750;letter-spacing:-.2px;color:var(--chumbo)}
+.alerta .pt{font-family:var(--mono);background:var(--chumbo);color:var(--ipe);padding:4px 10px;border-radius:999px;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
+.alerta p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--txt)}
+.alerta .taxas{margin:14px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.alerta .taxas li{background:rgba(255,255,255,.55);border-radius:10px;padding:11px 13px}
+.alerta .taxas b{display:block;font-family:var(--mono);font-size:17px;color:var(--cerrado)}
+.alerta .taxas span{font-size:11.5px;color:var(--txt2);line-height:1.35}
+@media(max-width:760px){.alerta .taxas{grid-template-columns:repeat(2,1fr)}}
+
 /* ---------- Stepper ---------- */
 .stepper{display:flex;margin-top:30px;position:relative}
 .step{flex:1;text-align:center;position:relative;min-width:0}
@@ -236,6 +247,19 @@ dialog::backdrop{background:rgba(47,48,42,.45)}
   <div class="stepper" id="stepper"></div>
 </section>
 
+<!-- ============ PONTO DE ATENÇÃO — CAEME ============ -->
+<section class="alerta">
+  <div class="alerta-h"><span class="pt">Ponto de atenção</span>Elaborar proposta para a CAEME</div>
+  <p>Com base nas informações repassadas pelo Sr. Gilson, representante da CAEME, o Ipasgo Saúde deve elaborar uma proposta de cessão de rede para a operadora. Atualmente a CAEME conta com cessão de rede da Unimed Cerrado, praticando as seguintes taxas de referência:</p>
+  <ul class="taxas">
+    <li><b>11%</b><span>Honorários, consultas e exames</span></li>
+    <li><b>7%</b><span>Diárias e taxas</span></li>
+    <li><b>5%</b><span>Mat/Med — tabela TNUMM Unimed</span></li>
+    <li><b>20%</b><span>OPME — valor da Nota Fiscal (tabela Unimed)</span></li>
+  </ul>
+  <p>A proposta do Ipasgo Saúde à CAEME deve considerar esses parâmetros de mercado atualmente praticados.</p>
+</section>
+
 <!-- ============ CRONOGRAMA ============ -->
 <section class="bloco">
   <div class="head-flex">
@@ -353,8 +377,8 @@ const OPERADORAS = [
  {ans:363855, nome:"Caixa de Assistência dos Empregados da Saneago", sigla:"CAESAN", cnpj:"37.382.009/0001-14", resp:"Nathalya", vidas:16209, sede:"Goiânia", mapeamento:"2026-07-19", contato:"2026-08-07", atualizacao:"2026-09-17", situacao:"Contato efetivo", interesse:"Sim",
   reuniao:{data:"2026-09-02", hora:null, status:"cancelada", notas:"Reunião cancelada pela operadora. Desde então, não há retorno às tentativas de contato da COPAR."},
   nota:"Contato realizado em 17/09/2026: a CAESAN informou que está em transição de sistema e, por isso, não pode avançar em um processo de reciprocidade/cessão no momento. Solicitaram que a COPAR retome o contato no final de outubro de 2026."},
- {ans:402206, nome:"Serviço de Assistência Médica aos Membros do Ministério Público", sigla:"SAMP / AGMP", cnpj:"08.408.751/0001-53", resp:"Arthur", vidas:1473, sede:"Goiânia", mapeamento:"2026-07-19", contato:"2026-08-20", atualizacao:"2026-09-14", situacao:"Reunião Agendada", interesse:"Sim",
-  reuniao:{data:"2026-09-21", hora:"15:00", status:"agendada", notas:null}},
+ {ans:402206, nome:"Serviço de Assistência Médica aos Membros do Ministério Público", sigla:"SAMP / AGMP", cnpj:"08.408.751/0001-53", resp:"Arthur", vidas:1473, sede:"Goiânia", mapeamento:"2026-07-19", contato:"2026-08-20", atualizacao:"2026-09-22", situacao:"Reunião realizada", interesse:"Sim",
+  reuniao:{data:"2026-09-21", hora:"15:00", status:"realizada", notas:"Reunião realizada conforme agendado. A SAMP/AGMP vai apresentar a proposta de cessão de rede do Ipasgo Saúde à Diretoria da entidade. Percepção da equipe COPAR: negociação está fria."}},
  {ans:416401, nome:"Caixa de Assistência dos Empregados da Embrapa", sigla:"CASEMBRAPA", cnpj:"08.097.092/0001-81", resp:"Nathalya", vidas:895, sede:"Brasília", mapeamento:"2026-07-19", contato:"2026-08-04", atualizacao:"2026-08-27", situacao:"Não responde", interesse:"Não", reuniao:null},
  {ans:417238, nome:"BRF S/A", sigla:"BRF", cnpj:"01.838.723/0001-27", resp:"Arthur", vidas:15024, sede:"Itajaí — SC", mapeamento:"2026-07-19", contato:"2026-08-06", atualizacao:"2026-08-27", situacao:"Não conseguiu contato", interesse:"Não", reuniao:null},
  {ans:422631, nome:"Associação Petrobras de Saúde", sigla:"APS", cnpj:"39.427.632/0001-71", resp:"Yasmin", vidas:432, sede:"Rio de Janeiro", mapeamento:"2026-07-19", contato:"2026-08-05", atualizacao:"2026-08-27", situacao:"Não conseguiu contato", interesse:"Não", reuniao:null},
